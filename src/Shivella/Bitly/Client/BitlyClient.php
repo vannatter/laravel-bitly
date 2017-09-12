@@ -38,6 +38,7 @@ class BitlyClient
 
     /**
      * @param string $url
+	 * @param string $domain
      *
      * @throws AccessTokenMissingException
      * @throws InvalidResponseException
@@ -45,14 +46,14 @@ class BitlyClient
      *
      * @return string
      */
-    public function getUrl($url)
+    public function getUrl($url, $domain="bit.ly")
     {
         if ($this->token === null) {
             throw new AccessTokenMissingException('Access token is not set');
         }
 
         try {
-            $requestUrl = sprintf('https://api-ssl.bitly.com/v3/shorten?longUrl=%s&access_token=%s', $url, $this->token);
+            $requestUrl = sprintf('https://api-ssl.bitly.com/v3/shorten?longUrl=%s&domain=%s&access_token=%s', $url, $domain, $this->token);
             $response = $this->client->send(new Request('GET', $requestUrl));
 
             if ($response->getStatusCode() === Response::HTTP_FORBIDDEN) {
